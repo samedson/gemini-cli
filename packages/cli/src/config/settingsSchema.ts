@@ -497,6 +497,16 @@ export const SETTINGS_SCHEMA = {
           'Sandbox execution environment (can be a boolean or a path string).',
         showInDialog: false,
       },
+      approvalMode: {
+        type: 'string',
+        label: 'Approval Mode',
+        category: 'Advanced',
+        requiresRestart: false,
+        default: undefined as string | undefined,
+        description:
+          'Set the default approval mode for tool execution (default, auto_edit, yolo).',
+        showInDialog: true,
+      },
       usePty: {
         type: 'boolean',
         label: 'Use node-pty for Shell Execution',

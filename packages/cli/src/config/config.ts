@@ -23,6 +23,7 @@ import {
   setGeminiMdFilename as setServerGeminiMdFilename,
   getCurrentGeminiMdFilename,
   ApprovalMode,
+  mapStringToApprovalMode,
   DEFAULT_GEMINI_MODEL,
   DEFAULT_GEMINI_EMBEDDING_MODEL,
   DEFAULT_MEMORY_FILE_FILTERING_OPTIONS,
@@ -395,25 +396,23 @@ export async function loadCliConfig(
   let approvalMode: ApprovalMode;
   if (argv.approvalMode) {
     // New --approval-mode flag takes precedence
-    switch (argv.approvalMode) {
-      case 'yolo':
-        approvalMode = ApprovalMode.YOLO;
-        break;
-      case 'auto_edit':
-        approvalMode = ApprovalMode.AUTO_EDIT;
-        break;
-      case 'default':
-        approvalMode = ApprovalMode.DEFAULT;
-        break;
-      default:
-        throw new Error(
-          `Invalid approval mode: ${argv.approvalMode}. Valid values are: yolo, auto_edit, default`,
-        );
+    const mode = mapStringToApprovalMode(argv.approvalMode);
+    if (mode) {
+      approvalMode = mode;
+    } else {
+      throw new Error(
+        `Invalid approval mode: ${argv.approvalMode}. Valid values are: yolo, auto_edit, default`,
+      );
     }
-  } else {
+  } else if (argv.yolo) {
     // Fallback to legacy --yolo flag behavior
+    approvalMode = ApprovalMode.YOLO;
+  } else if (settings.tools?.approvalMode) {
     approvalMode =
-      argv.yolo || false ? ApprovalMode.YOLO : ApprovalMode.DEFAULT;
+      mapStringToApprovalMode(settings.tools.approvalMode) ||
+      ApprovalMode.DEFAULT;
+  } else {
+    approvalMode = ApprovalMode.DEFAULT;
   }
 
   // Force approval mode to default if the folder is not trusted.

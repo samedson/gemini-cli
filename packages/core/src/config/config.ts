@@ -61,6 +61,21 @@ export enum ApprovalMode {
   YOLO = 'yolo',
 }
 
+export function mapStringToApprovalMode(
+  approvalMode: string,
+): ApprovalMode | undefined {
+  switch (approvalMode) {
+    case 'yolo':
+      return ApprovalMode.YOLO;
+    case 'auto_edit':
+      return ApprovalMode.AUTO_EDIT;
+    case 'default':
+      return ApprovalMode.DEFAULT;
+    default:
+      return undefined;
+  }
+}
+
 export interface AccessibilitySettings {
   disableLoadingPhrases?: boolean;
   screenReader?: boolean;
