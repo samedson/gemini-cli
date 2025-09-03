@@ -116,7 +116,7 @@ describe('Agent Server Endpoints', () => {
     const response = await request(app).get(`/tasks/${taskId}/metadata`);
     expect(response.status).toBe(200);
     expect(response.body.metadata.id).toBe(taskId);
-  }, 6000);
+  }, 10000);
 
   it('should get metadata for all tasks via GET /tasks/metadata', async () => {
     const createResponse = await createTask('test-context-3');

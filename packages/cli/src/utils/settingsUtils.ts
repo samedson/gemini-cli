@@ -210,7 +210,10 @@ export function getDialogSettingsByCategory(): Record<
   > = {};
 
   Object.values(FLATTENED_SCHEMA)
-    .filter((definition) => definition.showInDialog !== false)
+    .filter(
+      (definition) =>
+        definition.showInDialog !== false && definition.category !== 'Advanced',
+    )
     .forEach((definition) => {
       const category = definition.category;
       if (!categories[category]) {
@@ -230,7 +233,9 @@ export function getDialogSettingsByType(
 ): Array<SettingDefinition & { key: string }> {
   return Object.values(FLATTENED_SCHEMA).filter(
     (definition) =>
-      definition.type === type && definition.showInDialog !== false,
+      definition.type === type &&
+      definition.showInDialog !== false &&
+      definition.category !== 'Advanced',
   );
 }
 
